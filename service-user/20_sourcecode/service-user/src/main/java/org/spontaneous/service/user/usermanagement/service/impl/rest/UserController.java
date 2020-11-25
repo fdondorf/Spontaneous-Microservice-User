@@ -1,9 +1,6 @@
 package org.spontaneous.service.user.usermanagement.service.impl.rest;
 
 import java.security.Principal;
-import java.util.Optional;
-
-import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +12,7 @@ import org.spontaneous.service.user.usermanagement.dataaccess.api.UserEntity;
 import org.spontaneous.service.user.usermanagement.dataaccess.api.repo.UserRepository;
 import org.spontaneous.service.user.usermanagement.service.api.UpdateUserRequest;
 import org.spontaneous.service.user.usermanagement.service.api.UserDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContextException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,10 +31,10 @@ public class UserController extends AbstractClientAuthController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 
-	@Inject
+	@Autowired
 	private UserRepository userRepository;
 
-	@Inject
+	@Autowired
 	private Mapper mapper;
 
 	@GetMapping("/v1/current")
@@ -48,10 +46,8 @@ public class UserController extends AbstractClientAuthController {
 	 * Returns UserInfo, wrapped in a ResponseEntity. Will send a request against
 	 * PartnerPortal to get required information.
 	 *
-	 * @param headerData
-	 *            the HeaderData
-	 * @param principal
-	 *            the requested Principal
+	 * @param headerData the HeaderData
+	 * @param principal  the requested Principal
 	 * @return UserInfo wrapped in a ResponseEntitiy
 	 */
 	@RequestMapping(value = "/v1/userinfo", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -90,10 +86,8 @@ public class UserController extends AbstractClientAuthController {
 
 		// TODO: Exception werfen wenn nicht gefunden
 		// AuthenticatedUser authUser = getAuthUser(principal);
-		Optional<UserEntity> userOptional = userRepository.findById(updateUserRequest.getId());
-		if (userOptional.isPresent()) {
-
-			UserEntity userEntity = userOptional.get();
+		UserEntity userEntity = userRepository.findByEmail(updateUserRequest.getEmail());
+		if (userEntity != null) {
 
 			// TODO: New email need to be validated
 			// user.setEmail(userModel.getEmail());

@@ -30,9 +30,6 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 		http.authorizeRequests() //
 				.antMatchers("/v1/register").permitAll() //
 				.antMatchers("/**").authenticated();
-
-		// add this line to use H2 web console
-		// http.headers().frameOptions().disable();
 	}
 
 }

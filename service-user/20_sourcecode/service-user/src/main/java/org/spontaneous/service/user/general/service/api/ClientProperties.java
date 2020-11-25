@@ -2,8 +2,6 @@ package org.spontaneous.service.user.general.service.api;
 
 import java.util.List;
 
-import javax.inject.Named;
-
 /**
  * Container for the platform specific mobile client app properties.
  *
@@ -11,34 +9,34 @@ import javax.inject.Named;
  */
 public class ClientProperties extends CommonClientProperties {
 
-  private List<String> validAppVersions;
+	private List<String> validAppVersions;
 
-  private String recommendedAppVersion;
+	private String recommendedAppVersion;
 
-  private List<String> validAppKeys;
+	private List<String> validAppKeys;
 
-  public List<String> getValidAppVersions() {
-    return validAppVersions;
-  }
+	public List<String> getValidAppVersions() {
+		return validAppVersions;
+	}
 
-  public void setValidAppVersions(List<String> validAppVersions) {
-    this.validAppVersions = validAppVersions;
-  }
+	public void setValidAppVersions(List<String> validAppVersions) {
+		this.validAppVersions = validAppVersions;
+	}
 
-  public String getRecommendedAppVersion() {
-    return recommendedAppVersion;
-  }
+	public String getRecommendedAppVersion() {
+		return recommendedAppVersion;
+	}
 
-  public void setRecommendedAppVersion(String recommendedAppVersion) {
-    this.recommendedAppVersion = recommendedAppVersion;
-  }
+	public void setRecommendedAppVersion(String recommendedAppVersion) {
+		this.recommendedAppVersion = recommendedAppVersion;
+	}
 
-  public List<String> getValidAppKeys() {
-    return validAppKeys;
-  }
+	public List<String> getValidAppKeys() {
+		return validAppKeys;
+	}
 
-  public void setValidAppKeys(List<String> validAppKeys) {
-    this.validAppKeys = validAppKeys;
-  }
+	public void setValidAppKeys(List<String> validAppKeys) {
+		this.validAppKeys = validAppKeys;
+	}
 
 }

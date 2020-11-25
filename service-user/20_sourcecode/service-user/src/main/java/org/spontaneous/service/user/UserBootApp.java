@@ -15,7 +15,7 @@ import feign.Logger;
 @EnableFeignClients
 @EnableOAuth2Sso
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class UserApplication {
+public class UserBootApp {
 
     @Bean
     Logger.Level feignLoggerLevel() {
@@ -23,7 +23,7 @@ public class UserApplication {
     }
     
 	public static void main(String[] args) {
-		SpringApplication.run(UserApplication.class, args);
+		SpringApplication.run(UserBootApp.class, args);
 	}
 
 }

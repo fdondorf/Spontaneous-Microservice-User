@@ -2,7 +2,6 @@ package org.spontaneous.service.user.usermanagement.service.impl.rest;
 
 import java.util.Arrays;
 
-import javax.inject.Inject;
 import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
@@ -14,6 +13,7 @@ import org.spontaneous.service.user.usermanagement.dataaccess.api.repo.UserRepos
 import org.spontaneous.service.user.usermanagement.service.api.RegisteredUserResult;
 import org.spontaneous.service.user.usermanagement.service.api.UserDto;
 import org.spontaneous.service.user.usermanagement.service.api.rest.AuthServiceClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,23 +34,22 @@ public class RegisterController extends AbstractClientController {
 
 	private static final String ROLE_USER = "ROLE_USER";
 
-	@Inject
+	@Autowired
 	private UserRepository userRepository;
 
-	@Inject
+	@Autowired
 	private RoleRepository roleRepository;
 
-	@Inject
+	@Autowired
 	private AuthServiceClient authServiceClient;
 
-	@Inject
+	@Autowired
 	private Mapper mapper;
 
 	/**
 	 * Method for providing a rest interface for register a new user
 	 *
-	 * @param userTO
-	 *            The user to register
+	 * @param userTO The user to register
 	 * @return Returns a ResponseEntity
 	 */
 	@PostMapping("/v1/register")
