@@ -2,13 +2,10 @@ package org.spontaneous.service.user.common.builder;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import org.apache.cxf.helpers.IOUtils;
 import org.spontaneous.service.user.general.dataaccess.api.Gender;
-import org.spontaneous.service.user.usermanagement.dataaccess.api.RoleEntity;
 import org.spontaneous.service.user.usermanagement.dataaccess.api.UserEntity;
 
 public class UserEntityBuilder {
@@ -21,7 +18,7 @@ public class UserEntityBuilder {
 
 	}
 
-	public static UserEntityBuilder aDefaultUserEntity(RoleEntity role) {
+	public static UserEntityBuilder aDefaultUserEntity() {
 		UserEntityBuilder userEntityBuilder = new UserEntityBuilder();
 		userEntityBuilder.entity.setFirstname("Jonny");
 		userEntityBuilder.entity.setLastname("Olsen");
@@ -29,11 +26,7 @@ public class UserEntityBuilder {
 		userEntityBuilder.entity.setGender(Gender.MALE);
 
 		byte[] image = loadResource("/images/profile-image.jpg");
-		// userEntityBuilder.entity.setImage(image);
-
-		List<RoleEntity> roles = new ArrayList<RoleEntity>();
-		roles.add(role);
-		userEntityBuilder.entity.setRoles(roles);
+		userEntityBuilder.entity.setImage(image);
 
 		return userEntityBuilder;
 	}
@@ -53,11 +46,8 @@ public class UserEntityBuilder {
 		return this;
 	}
 
-	public UserEntityBuilder withRole(RoleEntity role) {
-		if (entity.getRoles() == null) {
-			entity.setRoles(new ArrayList<RoleEntity>());
-		}
-		entity.getRoles().add(role);
+	public UserEntityBuilder withGender(Gender gender) {
+		entity.setGender(gender);
 		return this;
 	}
 

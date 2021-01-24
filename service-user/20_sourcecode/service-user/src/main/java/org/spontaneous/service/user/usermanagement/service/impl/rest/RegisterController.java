@@ -1,14 +1,11 @@
 package org.spontaneous.service.user.usermanagement.service.impl.rest;
 
-import java.util.Arrays;
-
 import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spontaneous.service.user.general.service.api.rest.RegisterUserRequest;
 import org.spontaneous.service.user.usermanagement.dataaccess.api.UserEntity;
-import org.spontaneous.service.user.usermanagement.dataaccess.api.repo.RoleRepository;
 import org.spontaneous.service.user.usermanagement.dataaccess.api.repo.UserRepository;
 import org.spontaneous.service.user.usermanagement.service.api.RegisteredUserResult;
 import org.spontaneous.service.user.usermanagement.service.api.UserDto;
@@ -32,13 +29,8 @@ public class RegisterController extends AbstractClientController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(RegisterController.class);
 
-	private static final String ROLE_USER = "ROLE_USER";
-
 	@Autowired
 	private UserRepository userRepository;
-
-	@Autowired
-	private RoleRepository roleRepository;
 
 	@Autowired
 	private AuthServiceClient authServiceClient;
@@ -63,15 +55,15 @@ public class RegisterController extends AbstractClientController {
 		// Create user in user service db
 		UserEntity userEntity = new UserEntity();
 		mapper.map(registerUserRequest, userEntity);
-		userEntity.setRoles(Arrays.asList(roleRepository.findByName(ROLE_USER)));
 		userEntity = userRepository.save(userEntity);
 
 		// Create user in auth service db
 		UserDto userDto = new UserDto();
 		mapper.map(registerUserRequest, userDto);
+		userDto.setUserId(userEntity.getUserId());
 		this.authServiceClient.createUser(userDto);
 
-		RegisteredUserResult result = new RegisteredUserResult(userEntity.getId());
+		RegisteredUserResult result = new RegisteredUserResult(userEntity.getId(), userEntity.getUserId().toString());
 		ResponseEntity<RegisteredUserResult> response = new ResponseEntity<>(result, HttpStatus.OK);
 
 		return response;

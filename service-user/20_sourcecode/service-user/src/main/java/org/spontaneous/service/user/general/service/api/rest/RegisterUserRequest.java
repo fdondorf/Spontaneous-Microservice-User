@@ -2,7 +2,6 @@ package org.spontaneous.service.user.general.service.api.rest;
 
 public class RegisterUserRequest extends Header {
 
-	private Long userId;
 	private String firstname;
 	private String lastname;
 	private String email;
@@ -21,25 +20,6 @@ public class RegisterUserRequest extends Header {
 		this.email = email;
 		this.password = password;
 		this.gender = gender;
-	}
-
-	public RegisterUserRequest(Long id, String firstname, String lastname, String email, String password,
-			String gender) {
-		super();
-		this.userId = id;
-		this.firstname = firstname;
-		this.lastname = lastname;
-		this.email = email;
-		this.password = password;
-		this.gender = gender;
-	}
-
-	public Long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Long userId) {
-		this.userId = userId;
 	}
 
 	public String getFirstname() {

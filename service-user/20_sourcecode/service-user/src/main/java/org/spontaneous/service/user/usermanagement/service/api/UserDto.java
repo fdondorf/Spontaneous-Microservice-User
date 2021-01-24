@@ -1,54 +1,40 @@
 package org.spontaneous.service.user.usermanagement.service.api;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.UUID;
 
 public class UserDto {
 
-	private Long userId;
+	private Long id;
+	private UUID userId;
 	private String firstname;
 	private String lastname;
 	private String email;
 	private String password;
 	private String gender;
 	private byte[] image;
-	private List<String> roles;
 
 	public UserDto() {
 		super();
 	}
 
-	// public UserDto(String firstname, String lastname, String email, String
-	// password, String gender) {
-	// super();
-	// this.firstname = firstname;
-	// this.lastname = lastname;
-	// this.email = email;
-	// this.password = password;
-	// this.gender = gender;
-	// }
-	//
-	// public UserDto(Long id, String firstname, String lastname, String email,
-	// String password, String gender) {
-	// super();
-	// this.userId = id;
-	// this.firstname = firstname;
-	// this.lastname = lastname;
-	// this.email = email;
-	// this.password = password;
-	// this.gender = gender;
-	// }
-
-	public Long getUserId() {
-		return userId;
+	public Long getId() {
+		return id;
 	}
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getFirstname() {
 		return firstname;
+	}
+
+	public UUID getUserId() {
+		return userId;
+	}
+
+	public void setUserId(UUID userId) {
+		this.userId = userId;
 	}
 
 	public void setFirstname(String firstname) {
@@ -94,16 +80,4 @@ public class UserDto {
 	public void setImage(byte[] image) {
 		this.image = image;
 	}
-
-	public List<String> getRoles() {
-		if (this.roles == null) {
-			this.roles = new ArrayList<String>();
-		}
-		return roles;
-	}
-
-	public void setRoles(List<String> roles) {
-		this.roles = roles;
-	}
-
 }

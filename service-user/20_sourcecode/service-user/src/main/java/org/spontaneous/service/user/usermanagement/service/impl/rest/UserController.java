@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.spontaneous.service.user.general.dataaccess.api.Gender;
 import org.spontaneous.service.user.general.service.api.exception.UserNotFoundException;
 import org.spontaneous.service.user.general.service.api.rest.Header;
-import org.spontaneous.service.user.usermanagement.dataaccess.api.RoleEntity;
 import org.spontaneous.service.user.usermanagement.dataaccess.api.UserEntity;
 import org.spontaneous.service.user.usermanagement.dataaccess.api.repo.UserRepository;
 import org.spontaneous.service.user.usermanagement.service.api.UpdateUserRequest;
@@ -62,10 +61,6 @@ public class UserController extends AbstractClientAuthController {
 		UserEntity userEntity = userRepository.findByEmail(getAuthUser(principal).getName());
 		if (userEntity != null) {
 			UserDto userInfo = mapper.map(userEntity, UserDto.class);
-
-			for (RoleEntity roleEntity : userEntity.getRoles()) {
-				userInfo.getRoles().add(roleEntity.getName());
-			}
 
 			LOG.debug("userinfo: " + userInfo);
 

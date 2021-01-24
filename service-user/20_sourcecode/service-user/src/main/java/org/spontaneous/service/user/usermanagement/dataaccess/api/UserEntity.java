@@ -1,83 +1,65 @@
 package org.spontaneous.service.user.usermanagement.dataaccess.api;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import org.spontaneous.service.user.general.dataaccess.api.Gender;
 
-
 @Entity
-@Table(name="USERS")
+@Table(name = "USERS")
 public class UserEntity implements User, Serializable {
-	
+
 	private static final long serialVersionUID = -7447873502288352919L;
 
 	@Id
 	@GeneratedValue
 	private Long id;
-	
+
+	@Column(columnDefinition = "varchar(255)")
+	private UUID userId;
+
 	private String firstname;
-	
+
 	private String lastname;
-	
-	@Column(unique=true)
+
+	@Column(unique = true)
 	private String email;
-		
+
 	@Enumerated(EnumType.STRING)
 	private Gender gender;
-	
-	private byte [] image;
-	
-	@ManyToMany(fetch = FetchType.EAGER) //, cascade=CascadeType.ALL)
-	private List<RoleEntity> roles;
+
+	@Lob
+	@Column(length = 100000)
+	private byte[] image;
 
 	public UserEntity() {
-		;
+		this.userId = UUID.randomUUID();
 	}
 
-	public UserEntity(String firstname, String lastname, String email, List<RoleEntity> roles, Gender gender) {
-		this.firstname = firstname;
-		this.lastname = lastname;
-		this.email = email;
-		this.roles = roles;
-		this.gender = gender;
-	}
-	
-	public UserEntity(String firstname, String lastname, String email, List<RoleEntity> roles, Gender gender, byte [] image) {
-		this.firstname = firstname;
-		this.lastname = lastname;
-		this.email = email;
-		this.roles = roles;
-		this.gender = gender;
-		this.image = image;
-	}
-
+	@Override
 	public Long getId() {
 		return id;
 	}
-	
+
+	public UUID getUserId() {
+		return userId;
+	}
+
+	@Override
 	public String getEmail() {
 		return email;
 	}
 
-	public List<RoleEntity> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(List<RoleEntity> roles) {
-		this.roles = roles;
-	}
-	
+	@Override
 	public String getFirstname() {
 		return firstname;
 	}
@@ -86,6 +68,7 @@ public class UserEntity implements User, Serializable {
 		this.firstname = firstname;
 	}
 
+	@Override
 	public String getLastname() {
 		return lastname;
 	}

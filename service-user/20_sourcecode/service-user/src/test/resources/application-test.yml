@@ -1,0 +1,37 @@
+oauth2:
+  resourceId: spontaneous/secure
+  clientId: testId
+  clientSecret: testSecret
+
+
+spring:
+  cloud:
+    config:
+      enabled: false
+  main:
+    allow-bean-definition-overriding: true #i dont remember why but i think there is a bug with spring cloud and OAuth2ClientContext
+
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
+    username: sa
+    password: sa
+   
+# Feign
+feign:
+  hystrix:
+    enabled: false
+
+#This configuration file will hold common configs to be shared among all files
+eureka:
+  client:
+    enabled: false
+
+spontaneous:
+  client:
+    android:
+      apiVersion: 0.0.1
+      validApiVersions: 0.0.1,0.0.2,1.0.0
+      validAppVersions: 0,1,2
+      recommendedAppVersion: 0.0.1
+      validAppKeys: b1b8af6f-bafa-47ba-bf4a-cde83517934b

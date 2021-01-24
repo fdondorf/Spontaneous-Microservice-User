@@ -1,19 +1,31 @@
 package org.spontaneous.service.user;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 
 import javax.servlet.Filter;
 
 import org.hamcrest.Matchers;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.skyscreamer.jsonassert.JSONParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spontaneous.service.user.general.service.api.ClientProperties;
 import org.spontaneous.service.user.general.service.api.rest.AppSystemType;
 import org.spontaneous.service.user.general.service.api.rest.Header;
-import org.spontaneous.service.user.usermanagement.dataaccess.api.repo.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.mock.http.MockHttpOutputMessage;
+import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -23,16 +35,14 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 /**
- * Abstract class for Unit Tests for the Crud-Repository
+ * Abstract class for integrative Unit Tests
  * 
- * @author fdondorf
- * @param <springSecurityFilterChain>
+ * @author Florian Dondorf
  *
  */
-// @RunWith(SpringRunner.class)
-// @ContextConfiguration(classes = UserBootApp.class, initializers =
-// ConfigFileApplicationContextInitializer.class)
-public abstract class AbstractSpontaneousIntegrationTest extends AbstractSpontaneousTest {
+public abstract class AbstractIntegrationTest {
+
+	private static final Logger LOG = LoggerFactory.getLogger(AbstractIntegrationTest.class);
 
 	@Autowired
 	private ClientProperties androidClientProperties;
@@ -52,7 +62,9 @@ public abstract class AbstractSpontaneousIntegrationTest extends AbstractSpontan
 	private Filter springSecurityFilterChain;
 
 	@Autowired
-	protected RoleRepository roleRepository;
+	protected ConsumerTokenServices consumerTokenServices;
+
+	private HttpMessageConverter mappingJackson2HttpMessageConverter;
 
 	@BeforeEach
 	public void setup() throws Exception {
@@ -81,12 +93,11 @@ public abstract class AbstractSpontaneousIntegrationTest extends AbstractSpontan
 		}
 	}
 
-	public String getToken(String username, String password) throws Exception {
-		ResultActions resultLogin = this.mockMvc.perform(MockMvcRequestBuilders
-				.post("/uaa/spontaneous/secure/auth/token").with(httpBasic("spontaneous-client", "spontaneous-secret"))
-				.param("client_id", "spontaneous-client").param("client_secret", "spontaneous-secret")
-				.param("grant_type", "password").param("username", username).param("password", password)
-				.contentType(contentType));
+	protected String getToken(String username, String password) throws Exception {
+		ResultActions resultLogin = this.mockMvc.perform(MockMvcRequestBuilders.post("/oauth/token")
+				.with(httpBasic("testId", "testSecret")).param("client_id", "testId")
+				.param("client_secret", "testSecret").param("grant_type", "password").param("username", username)
+				.param("password", password).contentType(contentType));
 
 		// Assertions
 		resultLogin.andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("bearer")))
@@ -101,19 +112,48 @@ public abstract class AbstractSpontaneousIntegrationTest extends AbstractSpontan
 
 	}
 
-	public void revokeToken(String token) throws Exception {
-		ResultActions resultLogin = this.mockMvc.perform(MockMvcRequestBuilders.post("/spontaneous/secure/auth/revoke")
-				.with(bearerToken(token)).param("token", token).contentType(contentType));
+	protected void revokeToken(String token) throws Exception {
+
+		boolean revokeResult = consumerTokenServices.revokeToken(token);
+		if (revokeResult) {
+			LOG.debug("Token {} revoked.", token);
+		} else {
+			LOG.error("Token {} is already revoked.", token);
+		}
 
 		// Assertions
-		resultLogin.andExpect(MockMvcResultMatchers.status().isOk());
+		assertTrue(revokeResult);
 	}
 
-	public RequestPostProcessor bearerToken(final String token) {
+	protected RequestPostProcessor bearerToken(final String token) {
 		return mockRequest -> {
 			mockRequest.addHeader("Authorization", "Bearer " + token);
 			return mockRequest;
 		};
+	}
+
+	@Autowired
+	void setConverters(HttpMessageConverter<?>[] converters) {
+
+		this.mappingJackson2HttpMessageConverter = Arrays.asList(converters).stream()
+				.filter(hmc -> hmc instanceof MappingJackson2HttpMessageConverter).findAny().orElse(null);
+
+		Assertions.assertNotNull(this.mappingJackson2HttpMessageConverter,
+				"The JSON message converter must not be null");
+	}
+
+	@SuppressWarnings("unchecked")
+	protected String json(Object o) throws IOException {
+		MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();
+		this.mappingJackson2HttpMessageConverter.write(o, MediaType.APPLICATION_JSON, mockHttpOutputMessage);
+		String jsonString = mockHttpOutputMessage.getBodyAsString();
+		return jsonString;
+	}
+
+	protected JSONObject stringToJSON(String stringToParse) throws JSONException {
+		JSONObject json = (JSONObject) JSONParser.parseJSON(stringToParse);
+
+		return json;
 	}
 
 }
