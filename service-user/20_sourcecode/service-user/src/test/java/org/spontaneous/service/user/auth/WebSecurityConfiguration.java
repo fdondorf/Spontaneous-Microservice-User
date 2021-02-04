@@ -22,7 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	private CustomUserDetailsService userDetailsService;
+	private CustomAuthenticationProvider authProvider;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -36,10 +36,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
-
-//		auth.inMemoryAuthentication().withUser("test@test.de")
-//				.authorities(AuthorityUtils.createAuthorityList("ROLE_USER")).password("test");
-		auth.userDetailsService(this.userDetailsService).passwordEncoder(passwordEncoder());
+		auth.authenticationProvider(authProvider);
+		// auth.userDetailsService(this.userDetailsService).passwordEncoder(passwordEncoder());
 	}
 
 	/**

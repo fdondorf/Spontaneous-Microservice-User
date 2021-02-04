@@ -18,30 +18,30 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 public class AbstractClientAuthController extends AbstractClientController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractClientAuthController.class);
-	
-	  /**
-	   * Get the authenticated user.
-	   * 
-	   * @param principal - a spring-security principal
-	   * @return an authenticated {@link AuthenticatedUser}
-	   */
-	 public OAuth2Authentication getAuthUser(Principal principal) {
-		  
-		 LOG.info("Calling getAuthUser...");
-		  
-		 //AuthenticatedUser user = null;
-		 OAuth2Authentication authentication = null;
-		 if (principal instanceof OAuth2Authentication) {
-			 authentication = (OAuth2Authentication) principal;
-//			 if (authentication.getPrincipal() instanceof AuthenticatedUser) {
-//				 user = (AuthenticatedUser) authentication.getPrincipal();
-//			 }
-		 }
 
-		 if (authentication == null) {
-			 throw new UnauthorizedClientException("No logged in user found");
-		 }
-		 return authentication;
-	  }
-	 
+	/**
+	 * Get the authenticated user.
+	 * 
+	 * @param principal - a spring-security principal
+	 * @return an authenticated {@link AuthenticatedUser}
+	 */
+	public OAuth2Authentication getAuthUser(Principal principal) {
+
+		LOG.info("Calling getAuthUser...");
+
+		// AuthenticatedUser user = null;
+		OAuth2Authentication authentication = null;
+		if (principal instanceof OAuth2Authentication) {
+			authentication = (OAuth2Authentication) principal;
+//			if (authentication.getPrincipal() instanceof AuthenticatedUser) {
+//				user = (AuthenticatedUser) authentication.getPrincipal();
+//			}
+		}
+
+		if (authentication == null) {
+			throw new UnauthorizedClientException("No logged in user found");
+		}
+		return authentication;
+	}
+
 }

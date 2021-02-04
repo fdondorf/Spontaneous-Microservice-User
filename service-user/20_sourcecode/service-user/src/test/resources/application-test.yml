@@ -1,7 +1,9 @@
-oauth2:
-  resourceId: spontaneous/secure
-  clientId: testId
-  clientSecret: testSecret
+security:
+  oauth2:
+    resourceId: spontaneous/secure
+    clientId: testId
+    clientSecret: testSecret
+    user-info-uri: http://localhost:8082/spontaneous/api/user/secure/v1/current
 
 
 spring:
@@ -35,3 +37,13 @@ spontaneous:
       validAppVersions: 0,1,2
       recommendedAppVersion: 0.0.1
       validAppKeys: b1b8af6f-bafa-47ba-bf4a-cde83517934b
+
+logging:
+  level:
+    root: INFO
+    web: TRACE
+    org:
+      springframework:
+        web: TRACE
+        security: 
+          oauth2: TRACE
