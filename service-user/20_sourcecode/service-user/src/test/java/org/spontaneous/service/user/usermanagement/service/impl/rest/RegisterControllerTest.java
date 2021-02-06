@@ -33,7 +33,7 @@ import com.github.dozermapper.core.Mapper;
 @SpringBootTest
 @ContextConfiguration(classes = UserBootApp.class, initializers = ConfigFileApplicationContextInitializer.class)
 @WebAppConfiguration
-@TestPropertySource(properties = { "spring.config.location = classpath:application-test.yml" })
+@TestPropertySource(properties = { "spring.config.location = classpath:application-integration-test.yml" })
 public class RegisterControllerTest extends AbstractIntegrationTest {
 
 	private static final String EMAIL_TEST_USER = "test@test.de";

@@ -1,7 +1,6 @@
 package org.spontaneous.service.user.usermanagement.service.impl.rest;
 
 import java.security.Principal;
-import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,9 +16,6 @@ import org.springframework.context.ApplicationContextException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,9 +35,6 @@ public class UserController extends AbstractClientAuthController {
 
 	@Autowired
 	private Mapper mapper;
-
-	@Autowired
-	private AuthorizationServerTokenServices tokenServices;
 
 	@GetMapping("/v1/current")
 	public Principal getUser(Principal principal) {
@@ -84,9 +77,6 @@ public class UserController extends AbstractClientAuthController {
 		LOG.debug("Calling Controller 'updateUser'");
 
 		checkHeader(updateUserRequest);
-
-		OAuth2AccessToken accessToken = tokenServices.getAccessToken((OAuth2Authentication) principal);
-		UUID userId = (UUID) accessToken.getAdditionalInformation().get("userId");
 
 		UserEntity userEntity = userRepository.findByEmail(updateUserRequest.getEmail());
 		if (userEntity != null) {

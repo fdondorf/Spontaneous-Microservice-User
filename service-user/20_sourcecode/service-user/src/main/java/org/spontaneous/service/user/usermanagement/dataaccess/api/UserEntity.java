@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
 import org.spontaneous.service.user.general.dataaccess.api.Gender;
 
 @Entity
@@ -24,7 +25,8 @@ public class UserEntity implements User, Serializable {
 	@GeneratedValue
 	private Long id;
 
-	@Column(columnDefinition = "varchar(255)")
+	@Column(name = "user_id")
+	@Type(type = "uuid-char")
 	private UUID userId;
 
 	private String firstname;

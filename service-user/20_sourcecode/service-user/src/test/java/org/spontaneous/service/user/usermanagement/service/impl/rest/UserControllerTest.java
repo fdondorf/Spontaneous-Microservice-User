@@ -39,7 +39,7 @@ import com.github.dozermapper.core.Mapper;
 @SpringBootTest
 @ContextConfiguration(classes = UserBootApp.class, initializers = ConfigFileApplicationContextInitializer.class)
 @WebAppConfiguration
-@TestPropertySource(properties = { "spring.config.location = classpath:application-test.yml" })
+@TestPropertySource(properties = { "spring.config.location = classpath:application-integration-test.yml" })
 public class UserControllerTest extends AbstractIntegrationTest {
 
 	private static final String PASSWORD_TEST_USER = "test";
